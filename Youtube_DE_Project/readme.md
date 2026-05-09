@@ -121,6 +121,35 @@ A final Glue Job joins the Cleansed Statistics (Fact) and Cleansed Category Refe
 
 ---
 
+---
+
+## 💡 Engineering Decisions
+This project prioritizes the "Architecture of Trade-offs," choosing tools based on specific data characteristics rather than a "one size fits all" approach.
+
+### Why Parquet over CSV?
+While CSV is human-readable, it is highly inefficient for large-scale analytics. 
+* **Columnar Storage:** Parquet allows Athena to read only the specific columns required for a query, drastically reducing the amount of data scanned.
+* **Compression:** Parquet with Snappy compression reduced the storage footprint by ~50%, leading to faster I/O and lower S3 storage costs.
+
+### Why Partitioning was Chosen?
+We implemented Hive-style partitioning (`region=xx`) to enable **Partition Pruning**. 
+* **Query Optimization:** Without partitions, Athena would scan the entire bucket for every query. 
+* **Cost Efficiency:** By limiting the scan to specific folders (regions), we stay within the AWS Free Tier limits and ensure sub-second query performance.
+
+### Why Lambda for JSON instead of Glue?
+* **Complexity vs. Scale:** The JSON files were small but highly nested. AWS Lambda is cheaper and faster for "light" event-driven transformations using Python/Pandas. 
+* **Real-time Ingestion:** Lambda allowed us to create a trigger-based system where data is cleansed the second it lands, whereas Glue is better suited for high-volume, scheduled batch processing.
+
+### Why Athena instead of Redshift?
+* **Serverless Cost Model:** Redshift requires a provisioned cluster (hourly cost), whereas Athena is serverless—you only pay for the data scanned during a query.
+* **Zero Infrastructure:** For this volume of data, the "Pay-as-you-go" model of Athena is far more cost-effective for an analytical sandbox than maintaining a dedicated data warehouse.
+
+### Why `awswrangler` over Boto3?
+While Boto3 is the standard AWS SDK, `awswrangler` (AWS SDK for Pandas) was chosen because it provides high-level abstractions for writing Parquet files directly to S3 and automatically updating the Glue Data Catalog in a single step.
+
+---
+
+
 ## 🧪 Troubleshooting & Optimization
 
 ### 🔹 Schema Mismatch
