@@ -66,14 +66,13 @@ aws s3 cp CAvideos.csv s3://yt-de-project-raw-dev/youtube/raw_statistics/region=
 - Configured Lambda to trigger automatically on `S3:ObjectCreated`
 <img width="969" height="811" alt="image" src="https://github.com/user-attachments/assets/42ef335b-66c1-47e1-b426-b97bf329dec9" />
 
-<img width="1624" height="366" alt="image" src="https://github.com/user-attachments/assets/2fab313f-e6a0-4d8b-80e8-d5093f1414b6" />
 
 
 #### Transformation Logic
 
 - Used `pd.json_normalize` to flatten nested JSON structures
 - Cast `id` to `bigint` for join compatibility
-
+<img width="1624" height="366" alt="image" src="https://github.com/user-attachments/assets/2fab313f-e6a0-4d8b-80e8-d5093f1414b6" />
 ---
 
 ### 3. Distributed Processing (AWS Glue)
