@@ -49,6 +49,9 @@ The project is built entirely on **AWS**, ensuring a serverless and scalable inf
 - Configured AWS CLI and IAM users with programmatic access
 - Uploaded data to S3 using **Hive-style partitioning** (`region=xx`) to optimize query costs and performance
 
+<img width="1916" height="767" alt="image" src="https://github.com/user-attachments/assets/db0fcfe9-4b89-45d5-88c6-33bed5d5dc57" />
+
+
 #### Example Command
 
 ```bash
@@ -61,6 +64,10 @@ aws s3 cp CAvideos.csv s3://yt-de-project-raw-dev/youtube/raw_statistics/region=
 
 - Resolved `HIVE_CURSOR_ERROR` in Athena caused by nested JSON structures
 - Configured Lambda to trigger automatically on `S3:ObjectCreated`
+<img width="969" height="811" alt="image" src="https://github.com/user-attachments/assets/42ef335b-66c1-47e1-b426-b97bf329dec9" />
+
+<img width="1624" height="366" alt="image" src="https://github.com/user-attachments/assets/2fab313f-e6a0-4d8b-80e8-d5093f1414b6" />
+
 
 #### Transformation Logic
 
@@ -71,7 +78,13 @@ aws s3 cp CAvideos.csv s3://yt-de-project-raw-dev/youtube/raw_statistics/region=
 
 ### 3. Distributed Processing (AWS Glue)
 
+<img width="1283" height="236" alt="Screenshot 2026-05-09 170457" src="https://github.com/user-attachments/assets/73638592-a5b5-4298-bf92-4d191e90c41f" />
+
+
 For regional CSVs, an AWS Glue Job processes bulk data using PySpark.
+
+<img width="1619" height="417" alt="Screenshot 2026-05-09 171011" src="https://github.com/user-attachments/assets/d3927859-f1aa-40cd-85d7-e8df116b89d1" />
+
 
 #### Key Optimizations
 
@@ -91,6 +104,9 @@ Used `.coalesce(1)` to optimize Parquet file sizing and reduce the **Small File 
 
 ### 4. Analytics Layer (Gold Layer)
 
+<img width="1323" height="748" alt="Screenshot 2026-05-09 170559" src="https://github.com/user-attachments/assets/2b89417c-f644-438a-beb0-9c65f06e8f4b" />
+
+
 A final Glue Job joins the Cleansed Statistics (Fact) and Cleansed Category Reference (Dimension) datasets to create a fully enriched analytical layer.
 
 #### Processing Details
@@ -100,6 +116,8 @@ A final Glue Job joins the Cleansed Statistics (Fact) and Cleansed Category Refe
 
 - **Destination:**  
   Final data stored in the `yt-de-project-analytics-dev` bucket for Athena querying
+
+<img width="1615" height="323" alt="Screenshot 2026-05-09 171002" src="https://github.com/user-attachments/assets/e06eaa63-58e2-4d6e-ba24-46864eaa58dd" />
 
 ---
 
@@ -124,10 +142,14 @@ Through this pipeline, approximately **40,000 daily trending records per region*
 #### 📊 Category Performance
 
 Identify which video categories remain on trending lists the longest.
+<img width="1425" height="841" alt="image" src="https://github.com/user-attachments/assets/810f2c0e-ec82-48f8-802e-0df8384b76b0" />
+
 
 #### 🌍 Regional Trends
 
 Compare engagement metrics such as Likes-to-Views ratios across countries.
+<img width="1253" height="843" alt="image" src="https://github.com/user-attachments/assets/11e3b6af-bdbf-46c4-a6ab-c075952e8a64" />
+
 
 #### ⚡ System Efficiency
 
