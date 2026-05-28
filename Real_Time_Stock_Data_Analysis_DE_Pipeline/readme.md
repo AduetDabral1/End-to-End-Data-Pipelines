@@ -7,6 +7,9 @@ This project simulates real-time stock market streaming from a static dataset, i
 
 # Architecture Overview
 
+<img width="1252" height="703" alt="image" src="https://github.com/user-attachments/assets/72e9d7e8-13bd-470b-b125-22d8727b73dd" />
+
+
 ```text
 Static CSV Dataset
         ↓
