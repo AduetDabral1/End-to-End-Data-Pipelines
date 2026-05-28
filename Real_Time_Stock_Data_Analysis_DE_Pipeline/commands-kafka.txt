@@ -1,0 +1,63 @@
+Login to EC2 machine
+wget https://archive.apache.org/dist/kafka/3.3.1/kafka_2.12-3.3.1.tgz
+tar -xvf kafka_2.12-3.3.1.tgz
+
+-----------------
+
+java -version
+sudo yum install java-1.8.0-openjdk
+java -version
+cd kafka_2.12-3.3.1
+
+Start Zoo-keeper
+-------------------------------
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+SSH to to your EC2 machine in another terminal window to start kafka
+
+Start Kafka-server:
+----------------------------------------
+Duplicate the session & enter in a new console --
+export KAFKA_HEAP_OPTS="-Xmx1G -Xms1G"
+cd kafka_2.12-3.3.1
+bin/kafka-server-start.sh config/server.properties
+
+We couldn't use this server - address of kakfka server (DNS address to access kafka server- which is pur private ip dns of ec2, access to private dns from local system not possible unless they are in the same netwook)
+You'll get an error like this:
+Registered broker 0 at path /brokers/ids/0 with addresses: PLAINTEXT://ip-172-31-21-28.eu-north-1.compute.internal:9092, czxid (broker epoch): 25 (kafka.zk.KafkaZkClient)
+change of private dns to public dns is needed to access the server outisde of the network
+
+
+Stop the servers
+Change the config file
+
+sudo nano config/server.properties
+
+change ADVERTISED_LISTENERS to public ip of the EC2 instance
+
+Restart the Zookeeper and the Kafka server
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+
+Edit security group inbound rules to all all traffic from all servers(0.0.0.0/0) to give access of EC2 machine from your local server (not the best practice)
+
+
+
+
+Create the topic:
+-----------------------------
+Duplicate the session & enter in a new console
+cd kafka_2.12-3.3.1
+bin/kafka-topics.sh --create --topic demo_testing --bootstrap-server {Put the Public IP of your EC2 Instance:9092} --replication-factor 1 --partitions 1
+
+Start Producer:
+--------------------------
+bin/kafka-console-producer.sh --topic demo_testing --bootstrap-server {Put the Public IP of your EC2 Instance:9092} 
+
+Start Consumer:
+-------------------------
+Duplicate the session & enter in a new console --
+cd kafka_2.12-3.3.1
+bin/kafka-console-consumer.sh --topic demo_testing --bootstrap-server {Put the Public IP of your EC2 Instance:9092}
+
+
