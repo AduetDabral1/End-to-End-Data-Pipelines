@@ -80,6 +80,9 @@ Business Insights
 
 # Architecture
 
+<img width="960" height="540" alt="architecture" src="https://github.com/user-attachments/assets/2e279f7c-7d8f-48f6-8b75-cab78bbd1f02" />
+
+
 ## Cloud Components
 
 | Component | Purpose |
@@ -166,6 +169,9 @@ The analytics platform enables stakeholders to:
 
 # Pipeline Design
 
+<img width="1917" height="872" alt="Mage Pipeline UI" src="https://github.com/user-attachments/assets/b3c301a0-8e3f-4631-b367-d790808a985c" />
+
+
 The pipeline consists of three stages:
 
 ## 1. Data Ingestion
@@ -211,6 +217,9 @@ Transformed data is loaded into BigQuery for analytics and reporting.
 # Data Model
 
 To support fast and flexible analytics, the solution uses a dimensional model.
+
+<img width="1760" height="1206" alt="data_model" src="https://github.com/user-attachments/assets/95d1e21f-158c-4e8e-9ae5-ce9ddf44be57" />
+
 
 ## Core Business Dimensions
 
@@ -264,6 +273,8 @@ Supports:
 
 The final dashboard provides a business-focused view of operational performance.
 
+<img width="832" height="621" alt="Data Studio Report Snapshot" src="https://github.com/user-attachments/assets/f9f79870-1c37-4dad-9dcb-6c83a194b6d8" />
+
 ## Executive KPIs
 
 The dashboard tracks metrics such as:
@@ -287,6 +298,7 @@ Business users can explore:
 - High-value trips
 
 ### Key Finding
+
 
 Credit card transactions generate the largest share of revenue while also producing significantly higher tip percentages.
 
