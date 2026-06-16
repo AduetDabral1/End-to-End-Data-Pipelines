@@ -1,6 +1,4 @@
-# Uber Data ETL and Analytics | Modern Data Engineering Pipeline using GCP and Mage AI
-
-# 🚕 Uber Analytics Pipeline on Google Cloud
+# 🚕 Uber Analytics Pipeline on Google Cloud | ETL and Analytics | Modern ETL amd Analytics Pipeline
 
 > Transforming raw NYC taxi trip data into business-ready insights using Google Cloud, Python, Mage AI, BigQuery, and Google Data Studio.
 
@@ -8,7 +6,7 @@
 ![BigQuery](https://img.shields.io/badge/Data%20Warehouse-BigQuery-orange)
 ![Mage](https://img.shields.io/badge/Orchestration-Mage%20AI-purple)
 ![Python](https://img.shields.io/badge/Python-Data%20Engineering-yellow)
-![Data Studio](https://img.shields.io/badge/BI-Looker%20Studio-green)
+![Data Studio](https://img.shields.io/badge/BI-Data%20Studio-green)
 
 ---
 
@@ -62,7 +60,7 @@ Mage AI ETL Pipeline
 BigQuery Data Warehouse
     │
     ▼
-Looker Studio Dashboard
+Data Studio Dashboard
     │
     ▼
 Business Insights
@@ -74,7 +72,7 @@ Business Insights
 2. Mage AI orchestrates the data pipeline.
 3. Python transformations clean and structure the data.
 4. BigQuery stores analytics-ready datasets.
-5. Looker Studio provides interactive dashboards for business users.
+5. Data Studio provides interactive dashboards for business users.
 
 ---
 
@@ -92,7 +90,7 @@ Business Insights
 | Mage AI | Automates ETL workflows |
 | Python | Data transformation and processing |
 | BigQuery | Enterprise analytics warehouse |
-| Looker Studio | Interactive reporting and dashboards |
+| Data Studio | Interactive reporting and dashboards |
 
 ---
 
@@ -162,7 +160,7 @@ The analytics platform enables stakeholders to:
 | Workflow Automation | Mage AI |
 | Data Warehouse | BigQuery |
 | Analytics | SQL |
-| Visualization | Looker Studio |
+| Visualization | Data Studio |
 | Version Control | Git & GitHub |
 
 ---
@@ -431,19 +429,6 @@ Implemented a scalable solution using managed Google Cloud services.
 
 ---
 
-# Future Enhancements
-
-Potential improvements include:
-
-- Real-time data ingestion
-- Automated data quality monitoring
-- CI/CD deployment pipelines
-- Infrastructure as Code (Terraform)
-- Predictive demand forecasting
-- Machine learning-based revenue prediction
-
----
-
 # Why This Project Matters
 
 This project demonstrates the ability to bridge the gap between technical implementation and business outcomes.
@@ -462,7 +447,6 @@ It showcases the complete lifecycle of modern analytics engineering—from raw d
 ## Author
 
 **Aduet Dabral**
-
 Data Engineering • Analytics Engineering • Cloud Analytics • Business Intelligence
 
 If you found this project useful, consider giving it a ⭐.
