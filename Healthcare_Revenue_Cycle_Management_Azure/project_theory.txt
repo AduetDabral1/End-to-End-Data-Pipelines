@@ -1,0 +1,156 @@
+Technology used - Azure Data Engineering Stack
+
+Domain - Healthcare Revenue Cycle Management (RCM)
+
+-----------------------------------------------------------------------
+
+What is RCM?
+It is the process that hospitals or medical institutions use to manage the fianncial aspects, starting from the time a patient makes an appointment till the time the Healthcare provider gets paid.
+
+RCM ensures the healthcare provider can provide quality care while also staying fianncially healthy and viable.
+
+-----------------------------------------------------------------------
+
+Breakdown :
+ 
+1. Patient appointment made
+
+2. Patient visit
+    Info collected - Name, yada yada, Insurance details.
+                    This ensures the Healthcare provider knows who will pay for ther service (patient, insurance or a combination of both pay for the services)
+
+3. Services are provided by the Healthcare provider
+    Each proceedure, and medical expenses are documented
+
+4. Billing
+    The Healthcare provider generates an invoice and hands it to the payer.
+
+5. Claims are reviewed
+    Insurance company reviews the bill to approve/decline the payment (pay in full, partial payment, decline payment)
+
+6. Payments and follow-ups
+
+7. Tracking and service improvements
+
+-----------------------------------------------------------------------
+
+There are 2 major aspects as part of RCM :
+
+a. Accounts Receivable (AR)
+    - Payment received in lieu of providing healthcare services
+b. Accounts Payable (AP)
+    - Payment done to employees (doctors, nurses, staff).
+
+This project focueses primarily on Accounts Receivable
+
+-----------------------------------------------------------------------
+
+Patient paying the amounts iks often a risk for revenue of these healthcare providers.
+
+Scenarios when patient has to pay:
+ - Low Insurance cost and minimal coverage : these schemes put the most of the burden on the patients
+ - institutions where isnurance is not applicable
+ - dental treatment not insured
+ - heavy deductibles on insurance money
+
+-----------------------------------------------------------------------
+
+Why Accounts Receivable need to be healthy?
+    - Bring cash to the institution
+    - Mininize the collection period of the entire amounts (with inflation, there's a net loss)
+
+
+The probability of collecting the full invoice amount from a patient decreases with time.
+- 93% of money due 30 days old : recover 93% amount when the invoice is less than 30 days old
+- 85% of money due 60 days old
+- 73% of money due 90 days old
+
+-----------------------------------------------------------------------
+
+Some KPIs to measure AR and set benchmarks
+
+1. AR > 90 days
+     - Accounts that have aged higher than 90 days are at higher risk of going uncollected.
+     - % >90days = AR >90days / Total AR
+     - Benchmark - 10%
+    - Eg:
+        Total payable - 1 million 
+        Amount older than 90 days (not paid yet) - 200k
+        % >90days = 20%
+
+2. Days in AR
+     - Days in AR = AR balance/Avg Daily Gross Charges
+     - Eg:
+         1 million in 100 days - per day collection must be 10k 
+         400k yet to receive - 40 days needed to collect the entire amount
+     - Benchmark - 45 days
+
+3. Net Collection Rate
+
+References:
+https://mdmanagementgroup.com/healthcare-accounts-receivable-management/
+
+-----------------------------------------------------------------------
+
+What Data Engineers do here?
+
+- Data is present in different sources
+- We need to create a pipeline, so that unstructured data we have at source finally results in fact and dimesnion tables, which will help the reporting team to generate KPIs and make informed decisions.
+
+-----------------------------------------------------------------------
+
+Datasets
+
+- EMR data (Electronic Medical Records) [stored in Azure SQL DB]
+    - Patients table
+    - Provider (Doctors) table [speciality]
+    - Department table
+    - Transactions table [every charge stored - consultation, prescription, labs, meds, therapy]
+    - Encounter table [which patient meets which doctor]
+
+- Claims data (from insurance company) [Flat files - csv]
+    - Stored in a "Landing" folder in the DataLake 
+    - File is sent monthly by the insurance company to the hospitals
+
+- NPI data (National Provider Identifier)
+    - Doctor registration number that identifies a doctor uniquely
+    - Public API  
+
+- ICD data (International Classification of Diseases)                                                  
+    - Global standard for classifying diseases and health conditions, maintained by WHO.
+    - Maps diagnosis code and the disease description
+    - Public API 
+
+There are 2 databases, let's suppose 2 hospitals H1 and H2 have a merger.
+The data from both the institutions need not be perfectly aligned, and there might be differences in the schemas (different column names or different column count) of the tables in which say, patients data is stored.
+
+Now, to create a common data model, we need to create something like a surrogate key to tackle this issue.
+
+-----------------------------------------------------------------------
+
+Project Architecture - Medallion 
+
+    Landing Zone  ->  Bronze Layer  ->  Silver Layer  ->   Gold Layer
+    (Flat files)       (Parquet)        (Delta table)     (Delta table)
+
+File formats:
+    EMR (SQL DB)
+    Claims (Flat files)
+    NPI/ICD (Parquet Files)
+
+
+Layers
+
+   (for data engineers)                                    Bronze - parquet format (source of truth)
+                                                                        |
+                                                                        |  data cleaning, enrich data, CDM (Common data model), SCD2
+                                                                        v
+   (for Data Scientist, Machine Learning or Data Analysts)            Silver 
+                                                                        |
+                                                                        |  aggregation, fact tables and dimesnion tables   
+                                                                        v 
+    (for business users)                                               Gold
+
+
+
+    
