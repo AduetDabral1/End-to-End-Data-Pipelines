@@ -1,156 +1,397 @@
-Technology used - Azure Data Engineering Stack
+# Healthcare Revenue Cycle Management (RCM) Analytics Platform
 
-Domain - Healthcare Revenue Cycle Management (RCM)
+## Project Overview
 
------------------------------------------------------------------------
+This project focuses on building an end-to-end Healthcare Revenue Cycle Management (RCM) analytics platform using the Azure Data Engineering stack. The objective is to integrate healthcare operational data from multiple sources, standardize it through a Medallion Architecture, and create a business-ready data mart that supports reporting, analytics, and decision-making.
 
-What is RCM?
-It is the process that hospitals or medical institutions use to manage the fianncial aspects, starting from the time a patient makes an appointment till the time the Healthcare provider gets paid.
+---
 
-RCM ensures the healthcare provider can provide quality care while also staying fianncially healthy and viable.
+# What is Revenue Cycle Management (RCM)?
 
------------------------------------------------------------------------
+Revenue Cycle Management (RCM) is the process healthcare organizations use to manage the financial lifecycle of a patient, starting from appointment scheduling and ending when all payments for the services provided have been collected.
 
-Breakdown :
- 
-1. Patient appointment made
+The primary goal of RCM is to ensure healthcare providers can continue delivering quality patient care while maintaining financial stability.
 
-2. Patient visit
-    Info collected - Name, yada yada, Insurance details.
-                    This ensures the Healthcare provider knows who will pay for ther service (patient, insurance or a combination of both pay for the services)
+---
 
-3. Services are provided by the Healthcare provider
-    Each proceedure, and medical expenses are documented
+# Revenue Cycle Process
 
-4. Billing
-    The Healthcare provider generates an invoice and hands it to the payer.
+### 1. Patient Appointment
 
-5. Claims are reviewed
-    Insurance company reviews the bill to approve/decline the payment (pay in full, partial payment, decline payment)
+A patient schedules an appointment with a healthcare provider.
 
-6. Payments and follow-ups
+### 2. Patient Registration and Visit
 
-7. Tracking and service improvements
+Patient information such as demographics and insurance details is collected. This helps determine who is financially responsible for the healthcare services provided.
 
------------------------------------------------------------------------
+### 3. Service Delivery
 
-There are 2 major aspects as part of RCM :
+Healthcare services are provided and documented. Examples include:
 
-a. Accounts Receivable (AR)
-    - Payment received in lieu of providing healthcare services
-b. Accounts Payable (AP)
-    - Payment done to employees (doctors, nurses, staff).
+* Consultations
+* Laboratory tests
+* Prescriptions
+* Medical procedures
+* Therapies
 
-This project focueses primarily on Accounts Receivable
+### 4. Billing and Claim Creation
 
------------------------------------------------------------------------
+The healthcare provider generates a bill and submits a claim to the insurance company for reimbursement.
 
-Patient paying the amounts iks often a risk for revenue of these healthcare providers.
+### 5. Claim Adjudication
 
-Scenarios when patient has to pay:
- - Low Insurance cost and minimal coverage : these schemes put the most of the burden on the patients
- - institutions where isnurance is not applicable
- - dental treatment not insured
- - heavy deductibles on insurance money
+The insurance company reviews the claim and may:
 
------------------------------------------------------------------------
+* Approve payment
+* Partially approve payment
+* Deny payment
 
-Why Accounts Receivable need to be healthy?
-    - Bring cash to the institution
-    - Mininize the collection period of the entire amounts (with inflation, there's a net loss)
+### 6. Payment Collection
 
+Payments are received from insurance companies, patients, or both. Outstanding balances are tracked and followed up.
 
-The probability of collecting the full invoice amount from a patient decreases with time.
-- 93% of money due 30 days old : recover 93% amount when the invoice is less than 30 days old
-- 85% of money due 60 days old
-- 73% of money due 90 days old
+### 7. Revenue Analysis
 
------------------------------------------------------------------------
+Organizations monitor financial performance through key metrics and reports to improve revenue collection efficiency.
 
-Some KPIs to measure AR and set benchmarks
+---
 
-1. AR > 90 days
-     - Accounts that have aged higher than 90 days are at higher risk of going uncollected.
-     - % >90days = AR >90days / Total AR
-     - Benchmark - 10%
-    - Eg:
-        Total payable - 1 million 
-        Amount older than 90 days (not paid yet) - 200k
-        % >90days = 20%
+# Focus Area: Accounts Receivable (AR)
 
-2. Days in AR
-     - Days in AR = AR balance/Avg Daily Gross Charges
-     - Eg:
-         1 million in 100 days - per day collection must be 10k 
-         400k yet to receive - 40 days needed to collect the entire amount
-     - Benchmark - 45 days
+Revenue Cycle Management consists of multiple financial functions. This project primarily focuses on Accounts Receivable (AR).
 
-3. Net Collection Rate
+### Accounts Receivable (AR)
 
-References:
-https://mdmanagementgroup.com/healthcare-accounts-receivable-management/
+Money owed to the healthcare provider for services already delivered.
 
------------------------------------------------------------------------
+Examples:
 
-What Data Engineers do here?
+* Insurance reimbursements
+* Patient payments
+* Co-payments
+* Deductibles
 
-- Data is present in different sources
-- We need to create a pipeline, so that unstructured data we have at source finally results in fact and dimesnion tables, which will help the reporting team to generate KPIs and make informed decisions.
+### Accounts Payable (AP)
 
------------------------------------------------------------------------
+Money paid by healthcare organizations for operational expenses such as salaries and vendor payments.
 
-Datasets
+AP is outside the scope of this project.
 
-- EMR data (Electronic Medical Records) [stored in Azure SQL DB]
-    - Patients table
-    - Provider (Doctors) table [speciality]
-    - Department table
-    - Transactions table [every charge stored - consultation, prescription, labs, meds, therapy]
-    - Encounter table [which patient meets which doctor]
+---
 
-- Claims data (from insurance company) [Flat files - csv]
-    - Stored in a "Landing" folder in the DataLake 
-    - File is sent monthly by the insurance company to the hospitals
+# Why Accounts Receivable is Important
 
-- NPI data (National Provider Identifier)
-    - Doctor registration number that identifies a doctor uniquely
-    - Public API  
+Healthy Accounts Receivable directly impacts the financial health of healthcare organizations.
 
-- ICD data (International Classification of Diseases)                                                  
-    - Global standard for classifying diseases and health conditions, maintained by WHO.
-    - Maps diagnosis code and the disease description
-    - Public API 
+Benefits include:
 
-There are 2 databases, let's suppose 2 hospitals H1 and H2 have a merger.
-The data from both the institutions need not be perfectly aligned, and there might be differences in the schemas (different column names or different column count) of the tables in which say, patients data is stored.
+* Improved cash flow
+* Faster revenue collection
+* Reduced financial risk
+* Better operational efficiency
 
-Now, to create a common data model, we need to create something like a surrogate key to tackle this issue.
+The likelihood of collecting outstanding balances decreases as invoices age.
 
------------------------------------------------------------------------
+Typical industry trends:
 
-Project Architecture - Medallion 
+| Invoice Age          | Collection Probability |
+| -------------------- | ---------------------- |
+| Less than 30 Days    | 93%                    |
+| 31 - 60 Days         | 85%                    |
+| 61 - 90 Days         | 73%                    |
+| Greater than 90 Days | Significantly Lower    |
 
-    Landing Zone  ->  Bronze Layer  ->  Silver Layer  ->   Gold Layer
-    (Flat files)       (Parquet)        (Delta table)     (Delta table)
+---
 
-File formats:
-    EMR (SQL DB)
-    Claims (Flat files)
-    NPI/ICD (Parquet Files)
+# Key RCM Metrics
 
+## 1. AR Greater Than 90 Days
 
-Layers
+Measures the percentage of receivables that remain unpaid for more than 90 days.
 
-   (for data engineers)                                    Bronze - parquet format (source of truth)
-                                                                        |
-                                                                        |  data cleaning, enrich data, CDM (Common data model), SCD2
-                                                                        v
-   (for Data Scientist, Machine Learning or Data Analysts)            Silver 
-                                                                        |
-                                                                        |  aggregation, fact tables and dimesnion tables   
-                                                                        v 
-    (for business users)                                               Gold
+Formula:
 
+AR > 90 Days % = (AR Balance > 90 Days / Total AR Balance) × 100
 
+Industry Benchmark:
 
-    
+Less than 10%
+
+---
+
+## 2. Days in Accounts Receivable
+
+Measures how many days it takes on average to collect outstanding receivables.
+
+Formula:
+
+Days in AR = AR Balance / Average Daily Gross Charges
+
+Industry Benchmark:
+
+30 - 45 Days
+
+---
+
+## 3. Net Collection Rate (NCR)
+
+Measures how effectively an organization collects the revenue it is entitled to receive.
+
+Formula:
+
+Net Collection Rate = Payments Received / (Charges - Adjustments)
+
+Industry Benchmark:
+
+Greater than 95%
+
+---
+
+# Data Engineering Challenge
+
+Healthcare data is often distributed across multiple systems and formats.
+
+Common challenges include:
+
+* Multiple source systems
+* Different database schemas
+* Data quality issues
+* Duplicate records
+* Missing values
+* External reference datasets
+* Monthly file-based data exchanges
+
+The goal is to create a centralized and standardized analytical platform that supports enterprise reporting and KPI tracking.
+
+---
+
+# Data Sources
+
+## 1. Electronic Medical Records (EMR)
+
+Source: Azure SQL Database
+
+Contains operational healthcare data including:
+
+* Patients
+* Providers
+* Departments
+* Encounters
+* Transactions
+
+---
+
+## 2. Claims Data
+
+Source: CSV Files
+
+Monthly claim files received from insurance companies containing:
+
+* Claim information
+* Payment details
+* Adjustments
+* Reimbursement status
+
+---
+
+## 3. National Provider Identifier (NPI)
+
+Source: Public API
+
+Provides reference information about healthcare providers including unique NPI identifiers.
+
+---
+
+## 4. ICD Reference Data
+
+Source: Public API
+
+International Classification of Diseases (ICD) codes used to standardize diagnosis information.
+
+Provides:
+
+* Diagnosis Code
+* Disease Description
+* Disease Classification
+
+---
+
+# Hospital Merger Use Case
+
+Consider two hospitals, H1 and H2, that have recently merged.
+
+Although both hospitals maintain patient information, their databases may use different schemas and naming conventions.
+
+Example:
+
+Hospital H1:
+
+* patient_id
+* first_name
+* last_name
+* dob
+
+Hospital H2:
+
+* member_id
+* fname
+* lname
+* birth_date
+
+To create unified reporting across both organizations, a Common Data Model (CDM) is implemented.
+
+Key techniques include:
+
+* Schema standardization
+* Surrogate key generation
+* Data harmonization
+* Source system tracking
+
+---
+
+# Solution Architecture
+
+The project follows a Medallion Architecture pattern.
+
+Landing Zone → Bronze Layer → Silver Layer → Gold Layer
+
+---
+
+## Landing Zone
+
+Stores raw incoming data from all source systems.
+
+Purpose:
+
+* Preserve original data
+* Enable auditability
+* Support reprocessing
+
+---
+
+## Bronze Layer
+
+Storage Format: Parquet
+
+Purpose:
+
+* Raw ingestion layer
+* Source-aligned storage
+* Historical retention
+
+Acts as the source of truth.
+
+---
+
+## Silver Layer
+
+Storage Format: Delta Lake
+
+Purpose:
+
+* Data cleansing
+* Data standardization
+* Deduplication
+* Common Data Model implementation
+* Surrogate key generation
+* SCD Type 2 processing
+* Data quality validation
+
+Produces trusted and conformed datasets.
+
+---
+
+## Gold Layer
+
+Storage Format: Delta Lake
+
+Purpose:
+
+* Business-ready analytics layer
+* Star schema implementation
+* Fact and dimension modeling
+* KPI reporting
+* Self-service analytics
+
+Used by:
+
+* Power BI dashboards
+* Business analysts
+* Ad-hoc reporting
+* Machine Learning workloads
+
+---
+
+# Gold Layer Data Mart
+
+## Fact Table
+
+### fact_transactions
+
+Contains transactional and financial measures such as:
+
+* Charge Amount
+* Payer Paid Amount
+* Patient Paid Amount
+* Adjustment Amount
+
+Tracks:
+
+* Service Date
+* Claim Date
+* Payment Date
+
+---
+
+## Dimension Tables
+
+### dim_patients
+
+Patient demographic information.
+
+### dim_providers
+
+Provider information and specialty details.
+
+### dim_department
+
+Department information.
+
+### dim_diagnosis
+
+ICD diagnosis reference data.
+
+### dim_npi
+
+National Provider Identifier reference data.
+
+---
+
+# Azure Services Used
+
+* Azure Data Factory
+* Azure Data Lake Storage Gen2
+* Azure SQL Database
+* Azure Databricks
+* Delta Lake
+* PySpark
+* Azure Key Vault
+* Power BI
+
+---
+
+# Project Outcome
+
+Built a scalable healthcare analytics platform that integrates EMR systems, insurance claims data, and healthcare reference datasets into a centralized Azure data warehouse.
+
+The solution enables stakeholders to monitor critical RCM KPIs, including:
+
+* AR Aging
+* Days in AR
+* Net Collection Rate
+* Provider Performance
+* Department Revenue
+* Payer Performance
+* Patient Payment Trends
+
+through a business-friendly star schema optimized for reporting and analytics.
