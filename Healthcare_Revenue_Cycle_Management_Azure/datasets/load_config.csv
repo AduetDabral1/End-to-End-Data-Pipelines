@@ -1,0 +1,11 @@
+database,datasource,tablename,loadtype,watermark,is_active,targetpath
+aduet-hospital-h1,hos-h1,dbo.encounters,Incremental,ModifiedDate,0,hosh1
+aduet-hospital-h1,hos-h1,dbo.patients,Incremental,ModifiedDate,0,hosh1
+aduet-hospital-h1,hos-h1,dbo.transactions,Incremental,ModifiedDate,0,hosh1
+aduet-hospital-h1,hos-h1,dbo.providers,Full,,0,hosh1
+aduet-hospital-h1,hos-h1,dbo.departments,Full,,0,hosh1
+aduet-hospital-h2,hos-h2,dbo.encounters,Incremental,ModifiedDate,0,hosh2
+aduet-hospital-h2,hos-h2,dbo.patients,Incremental,Updated_Date,1,hosh2
+aduet-hospital-h2,hos-h2,dbo.transactions,Incremental,ModifiedDate,0,hosh2
+aduet-hospital-h2,hos-h2,dbo.providers,Full,,0,hosh2
+aduet-hospital-h2,hos-h2,dbo.departments,Full,,0,hosh2
