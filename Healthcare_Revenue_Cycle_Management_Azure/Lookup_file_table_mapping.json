@@ -1,0 +1,72 @@
+[
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH1/departments.csv",
+        "FileName": "departments.csv",
+        "DatabaseName": "aduet-hospital-h1",
+        "TableName": "Departments"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH1/providers.csv",
+        "FileName": "providers.csv",
+        "DatabaseName": "aduet-hospital-h1",
+        "TableName": "Providers"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH1/encounters.csv",
+        "FileName": "encounters.csv",
+        "DatabaseName": "aduet-hospital-h1",
+        "TableName": "Encounters"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH1/patients.csv",
+        "FileName": "patients.csv",
+        "DatabaseName": "aduet-hospital-h1",
+        "TableName": "Patients"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH1/transactions.csv",
+        "FileName": "transactions.csv",
+        "DatabaseName": "aduet-hospital-h1",
+        "TableName": "Transactions"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH2/departments.csv",
+        "FileName": "departments.csv",
+        "DatabaseName": "aduet-hospital-h2",
+        "TableName": "Departments"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH2/providers.csv",
+        "FileName": "providers.csv",
+        "DatabaseName": "aduet-hospital-h2",
+        "TableName": "Providers"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH2/encounters.csv",
+        "FileName": "encounters.csv",
+        "DatabaseName": "aduet-hospital-h2",
+        "TableName": "Encounters"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH2/patients.csv",
+        "FileName": "patients.csv",
+        "DatabaseName": "aduet-hospital-h2",
+        "TableName": "Patients"
+    },
+    {
+        "Container": "raw-data-for-sql-database",
+        "FilePath": "HospitalH2/transactions.csv",
+        "FileName": "transactions.csv",
+        "DatabaseName": "aduet-hospital-h2",
+        "TableName": "Transactions"
+    }
+]
