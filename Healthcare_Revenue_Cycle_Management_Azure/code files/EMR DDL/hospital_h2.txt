@@ -1,4 +1,4 @@
--- For database trendytech-hospital-b:
+-- For database aduet-hospital-h2:
 
 -- 2. Departments Table:
 
